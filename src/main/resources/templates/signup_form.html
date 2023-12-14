@@ -1,72 +1,16 @@
 <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
-<div class="container my-3">
-    <div class="my-3 border-bottom">
-        <div>
-            <h4>회원가입</h4>
-        </div>
-    </div>
-    <form th:action="@{/user/signup}" th:object="${userCreateForm}" method="post">
-        <div class="mb-3">
-            <label for="username" class="form-label">사용자ID</label>
-            <input type="text" th:field="*{username}" class="form-control">
-        </div>
-        <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
-            <div th:each="err : ${#fields.errors('username')}" th:text="${err}" />
-        </div>
-        <div class="mb-3">
-            <label for="password1" class="form-label">비밀번호</label>
-            <input type="password" th:field="*{password1}" class="form-control">
-        </div>
-        <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
-            <div th:each="err : ${#fields.errors('password1')}" th:text="${err}" />
-        </div>
-        <div class="mb-3">
-            <label for="password2" class="form-label">비밀번호 확인</label>
-            <input type="password" th:field="*{password2}" class="form-control">
-        </div>
-        <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
-            <div th:each="err : ${#fields.errors('password2')}" th:text="${err}" />
-        </div>
-        <div class="mb-3">
-            <input type="text" name="mail" id="mail" placeholder="이메일 입력">
-            <button type="button" id="sendBtn" name="sendBtn" onclick="sendNumber()" class="btn btn-primary">인증번호</button>
-        </div>
-        <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
-            <div th:each="err : ${#fields.errors('email')}" th:text="${err}" />
-        </div>
-        <div class="mb-3">
-            <input type="text" name="number" id="number" placeholder="인증번호 입력">
-            <button type="button" name="confirmBtn" id="confirmBtn" onclick="confirmNumber()">이메일 인증</button>
-        </div>
-        <div class="mb-3">
-            <label for="area" class="form-label">지역</label>
-            <input type="text" th:field="*{area}" class="form-control">
-        </div>
-        <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
-            <div th:each="err : ${#fields.errors('area')}" th:text="${err}" />
-        </div>
-        <div class="mb-3">
-            <label for="level" class="form-label">레벨</label>
-            <input type="text" th:field="*{level}" class="form-control">
-        </div>
-        <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
-            <div th:each="err : ${#fields.errors('level')}" th:text="${err}" />
-        </div>
-        <button type="submit" class="btn btn-primary">회원가입</button>
-    </form>
-</div>
-
-<script type="javascript">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script type="text/javascript">
     function sendNumber(){
         $("#mail_number").css("display","block");
         $.ajax({
-            url:"/mail",
+            url:"/user/mail",
             type:"post",
             dataType:"json",
             data:{"mail" : $("#mail").val()},
             success: function(data){
                 alert("인증번호 발송");
-                $("#Confirm").attr("value",data);
+                $("#Confirm").val(data);
             }
         });
     }
@@ -82,3 +26,49 @@
         }
     }
 </script>
+<div class="container my-3">
+    <div class="my-3 border-bottom">
+        <div>
+            <h4>회원가입</h4>
+        </div>
+    </div>
+    <form th:action="@{/user/signup}" th:object="${userCreateForm}" method="post">
+        <div class="mb-3">
+            <label for="username" class="form-label">사용자ID</label>
+            <input type="text" th:field="*{username}" class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <label for="password1" class="form-label">비밀번호</label>
+            <input type="password" th:field="*{password1}" class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <label for="password2" class="form-label">비밀번호 확인</label>
+            <input type="password" th:field="*{password2}" class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <input type="text" name="mail" id="mail" placeholder="이메일 입력" class="form-control">
+            <button type="button" id="sendBtn" name="sendBtn" onclick="sendNumber()" class="btn btn-primary">인증번호</button>
+        </div>
+
+        <div class="mb-3">
+            <input type="text" name="number" id="number" placeholder="인증번호 입력" class="form-control">
+            <button type="button" name="confirmBtn" id="confirmBtn" onclick="confirmNumber()" class="btn btn-primary">이메일 인증</button>
+        </div>
+
+        <div class="mb-3">
+            <label for="area" class="form-label">지역</label>
+            <input type="text" th:field="*{area}" class="form-control">
+            <label for="level" class="form-label">레벨</label>
+            <input type="text" th:field="*{level}" class="form-control">
+        </div>
+
+        <button type="submit" class="btn btn-primary">회원가입</button>
+
+        <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
+            <div th:each="err : ${#fields.allErrors('userCreateForm')}" th:text="${err}" />
+        </div>
+    </form>
+</div>
