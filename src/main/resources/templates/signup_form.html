@@ -28,11 +28,15 @@
             <div th:each="err : ${#fields.errors('password2')}" th:text="${err}" />
         </div>
         <div class="mb-3">
-            <label for="email" class="form-label">이메일</label>
-            <input type="email" th:field="*{email}" class="form-control">
+            <input type="text" name="mail" id="mail" placeholder="이메일 입력">
+            <button type="button" id="sendBtn" name="sendBtn" onclick="sendNumber()" class="btn btn-primary">인증번호</button>
         </div>
         <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
             <div th:each="err : ${#fields.errors('email')}" th:text="${err}" />
+        </div>
+        <div class="mb-3">
+            <input type="text" name="number" id="number" placeholder="인증번호 입력">
+            <button type="button" name="confirmBtn" id="confirmBtn" onclick="confirmNumber()">이메일 인증</button>
         </div>
         <div class="mb-3">
             <label for="area" class="form-label">지역</label>
@@ -51,3 +55,30 @@
         <button type="submit" class="btn btn-primary">회원가입</button>
     </form>
 </div>
+
+<script type="javascript">
+    function sendNumber(){
+        $("#mail_number").css("display","block");
+        $.ajax({
+            url:"/mail",
+            type:"post",
+            dataType:"json",
+            data:{"mail" : $("#mail").val()},
+            success: function(data){
+                alert("인증번호 발송");
+                $("#Confirm").attr("value",data);
+            }
+        });
+    }
+
+    function confirmNumber(){
+        var number1 = $("#number").val();
+        var number2 = $("#Confirm").val();
+
+        if(number1 == number2){
+            alert("인증되었습니다.");
+        }else{
+            alert("번호가 다릅니다.");
+        }
+    }
+</script>
